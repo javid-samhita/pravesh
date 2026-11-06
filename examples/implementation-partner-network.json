@@ -1,0 +1,97 @@
+{
+  "$schema": "../schema/pravesh.config.schema.json",
+  "schemaVersion": "1.0",
+  "id": "implementation-partner-network",
+  "identity": {
+    "name": "Sahyog Partner Network",
+    "tagline": "Onboard NGOs and social enterprises as implementation partners for CSR programmes.",
+    "description": "Register your organisation as an implementation partner for funded social programmes. Due diligence covers legal registration, tax exemptions, CSR eligibility and financial track record, and typically completes in 2 to 3 weeks.",
+    "logo": "",
+    "colors": { "primary": "#0F766E", "accent": "#B45309" },
+    "supportEmail": "partners@sahyog.example.org",
+    "website": "https://sahyog.example.org"
+  },
+  "providerTypes": [
+    { "id": "ngo", "name": "Implementation partner (NGO)", "description": "Trusts, societies and Section 8 companies delivering programmes on the ground." },
+    { "id": "social_enterprise", "name": "Social enterprise", "description": "For-profit or hybrid enterprises delivering products or services with a social mission." },
+    { "id": "training_institute", "name": "Training institute", "description": "Skilling and livelihood institutions running certified training programmes." }
+  ],
+  "fields": [
+    { "id": "legal_name", "label": "Legal name of the organisation", "type": "text", "required": true, "placeholder": "As printed on your registration certificate", "providerTypes": [], "validation": { "minLength": 3, "maxLength": 120 } },
+    { "id": "entity_type", "label": "Type of entity", "type": "dropdown", "required": true, "options": ["Public Charitable Trust", "Registered Society", "Section 8 Company", "Private Limited", "LLP", "Partnership"], "providerTypes": [] },
+    { "id": "pan", "label": "Organisation PAN", "type": "text", "required": true, "placeholder": "AAATS1234F", "providerTypes": [], "validation": { "pattern": "[A-Z]{5}[0-9]{4}[A-Z]", "patternMessage": "PAN must be 10 characters, e.g. AAATS1234F." } },
+    { "id": "csr1_number", "label": "CSR-1 registration number", "type": "text", "required": true, "placeholder": "CSR00012345", "helpText": "Issued by the Ministry of Corporate Affairs. Required to receive CSR funds.", "providerTypes": ["ngo"], "validation": { "pattern": "CSR[0-9]{8}", "patternMessage": "Enter a valid CSR-1 number, e.g. CSR00012345." } },
+    { "id": "darpan_id", "label": "NGO Darpan ID", "type": "text", "required": false, "placeholder": "MH/2019/0234567", "providerTypes": ["ngo"] },
+    { "id": "registration_12a", "label": "12A / 12AB registration number", "type": "text", "required": true, "providerTypes": ["ngo"] },
+    { "id": "contact_email", "label": "Programme contact email", "type": "email", "required": true, "placeholder": "programmes@yourorg.org", "providerTypes": [] },
+    { "id": "contact_mobile", "label": "Authorised contact mobile", "type": "mobile", "required": true, "placeholder": "98765 43210", "helpText": "We send onboarding updates to this number.", "providerTypes": [] },
+    { "id": "states", "label": "States of operation", "type": "multiselect", "required": true, "options": ["Maharashtra", "Karnataka", "Tamil Nadu", "Telangana", "Uttar Pradesh", "Bihar", "Odisha", "Rajasthan", "West Bengal", "Assam"], "providerTypes": [] },
+    { "id": "focus_areas", "label": "Focus areas", "type": "multiselect", "required": true, "options": ["Livelihoods & skilling", "Education", "Health & nutrition", "Women's empowerment", "Financial inclusion", "Environment", "Water & sanitation"], "providerTypes": [] },
+    { "id": "annual_budget", "label": "Annual programme budget (INR lakh)", "type": "number", "required": true, "placeholder": "250", "providerTypes": [], "validation": { "min": 1 } },
+    { "id": "beneficiaries", "label": "People reached in the last financial year", "type": "number", "required": true, "placeholder": "12000", "providerTypes": ["ngo", "social_enterprise"], "validation": { "min": 0 } },
+    { "id": "delivery_model", "label": "Delivery model", "type": "radio", "required": true, "options": ["Direct implementation", "Through community partners", "Hybrid"], "providerTypes": ["ngo", "social_enterprise"] },
+    { "id": "accreditation", "label": "Sector Skill Council accreditation", "type": "dropdown", "required": true, "options": ["Retailers Association SSC", "Logistics SSC", "Healthcare SSC", "IT-ITeS SSC", "Other", "Not accredited"], "providerTypes": ["training_institute"] },
+    { "id": "annual_capacity", "label": "Annual training capacity (candidates)", "type": "number", "required": true, "providerTypes": ["training_institute"], "validation": { "min": 1 } },
+    { "id": "website", "label": "Website", "type": "url", "required": false, "placeholder": "https://yourorg.org", "providerTypes": [] },
+    { "id": "fcra", "label": "We hold FCRA registration", "type": "checkbox", "required": false, "providerTypes": ["ngo"] }
+  ],
+  "documents": [
+    { "id": "registration_certificate", "name": "Registration certificate", "description": "Trust deed, society registration certificate or certificate of incorporation.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": [] },
+    { "id": "pan_card", "name": "Organisation PAN card", "description": "Scanned copy of the PAN card of the organisation.", "acceptedTypes": ["pdf", "jpg", "png"], "maxSizeMB": 2, "required": true, "providerTypes": [] },
+    { "id": "certificate_12a_80g", "name": "12A and 80G certificates", "description": "Current registration under sections 12A/12AB and 80G of the Income Tax Act.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": ["ngo"] },
+    { "id": "csr1_form", "name": "CSR-1 acknowledgement", "description": "MCA acknowledgement showing your CSR-1 registration number.", "acceptedTypes": ["pdf"], "maxSizeMB": 2, "required": true, "providerTypes": ["ngo"] },
+    { "id": "audited_financials", "name": "Audited financial statements (last 3 years)", "description": "Balance sheet, income and expenditure account and auditor's report for each year.", "acceptedTypes": ["pdf"], "maxSizeMB": 20, "required": true, "providerTypes": [] },
+    { "id": "annual_report", "name": "Latest annual report", "description": "Programme outcomes, governance and board composition.", "acceptedTypes": ["pdf"], "maxSizeMB": 20, "required": false, "providerTypes": ["ngo", "social_enterprise"] },
+    { "id": "accreditation_letter", "name": "Accreditation letter", "description": "Affiliation or accreditation letter from the Sector Skill Council.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": ["training_institute"] },
+    { "id": "cancelled_cheque", "name": "Cancelled cheque", "description": "For grant disbursement. Name must match the legal entity.", "acceptedTypes": ["pdf", "jpg", "png"], "maxSizeMB": 2, "required": true, "providerTypes": [] },
+    { "id": "authorisation_letter", "name": "Authorisation letter", "description": "Board resolution or letter authorising the signatory on the organisation's letterhead.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": [] }
+  ],
+  "workflow": {
+    "initialStage": "draft",
+    "submittedStage": "submitted",
+    "stages": [
+      { "id": "draft", "name": "Draft", "description": "Application is being prepared by the organisation.", "tone": "neutral", "terminal": false, "requiredActions": [], "transitions": ["submitted"] },
+      { "id": "submitted", "name": "Submitted", "description": "Received and queued for the partnerships team.", "tone": "info", "terminal": false, "requiredActions": ["Assign reviewer"], "transitions": ["due_diligence"] },
+      { "id": "due_diligence", "name": "Due diligence", "description": "Registration, tax exemptions and financial statements are being checked.", "tone": "info", "terminal": false, "requiredActions": ["Verify CSR-1 on the MCA portal", "Review 3 years of audited financials"], "transitions": ["documents_pending", "site_visit", "rejected"] },
+      { "id": "documents_pending", "name": "Documents pending", "description": "Additional or corrected documents were requested from the organisation.", "tone": "warning", "terminal": false, "requiredActions": ["Confirm re-uploaded documents"], "transitions": ["due_diligence", "rejected"] },
+      { "id": "site_visit", "name": "Site visit", "description": "A programme officer visits a field location and meets the leadership team.", "tone": "warning", "terminal": false, "requiredActions": ["Upload site visit report"], "transitions": ["approved", "rejected", "documents_pending"] },
+      { "id": "approved", "name": "Approved", "description": "Organisation is an empanelled implementation partner.", "tone": "success", "terminal": true, "requiredActions": [], "transitions": [] },
+      { "id": "rejected", "name": "Rejected", "description": "Application was not approved. The organisation may re-apply after 6 months.", "tone": "danger", "terminal": true, "requiredActions": [], "transitions": [] }
+    ]
+  },
+  "consents": [
+    { "id": "terms", "title": "Partner code of conduct", "description": "I accept the partner code of conduct, including the safeguarding, anti-fraud and conflict-of-interest policies.", "purpose": "Contractual basis for partnership", "required": true, "stage": "draft", "version": "2026.2" },
+    { "id": "registry_verification", "title": "Registration verification", "description": "I authorise the network to verify our PAN, CSR-1 and 12A/80G registrations with government records.", "purpose": "Legal and tax verification", "required": true, "stage": "draft", "version": "2026.1" },
+    { "id": "updates", "title": "Programme updates", "description": "Send me updates about new funding calls, convenings and capacity-building sessions.", "purpose": "Programme communication", "required": false, "stage": "draft", "version": "2026.1" },
+    { "id": "site_visit_data", "title": "Site visit data sharing", "description": "I agree that photographs and notes from the site visit may be shared with prospective funders.", "purpose": "Funder due diligence", "required": true, "stage": "site_visit", "version": "2026.1" }
+  ],
+  "technical": {
+    "apiBaseUrl": "https://api.sahyog.example.org/onboarding/v1",
+    "webhooks": [
+      { "id": "wh_grants", "url": "https://grants.sahyog.example.org/hooks/pravesh", "events": ["application.approved", "application.rejected"], "secretEnv": "PRAVESH_GRANTS_WEBHOOK_SECRET", "enabled": true },
+      { "id": "wh_crm", "url": "https://crm.sahyog.example.org/webhooks/onboarding", "events": ["application.submitted", "application.stage_changed", "document.uploaded"], "secretEnv": "PRAVESH_CRM_WEBHOOK_SECRET", "enabled": true }
+    ],
+    "callbacks": {
+      "onSubmit": "https://sahyog.example.org/partners/thanks",
+      "onApproved": "https://partners.sahyog.example.org/welcome",
+      "onRejected": "https://sahyog.example.org/partners/help"
+    },
+    "integrations": [
+      { "id": "pan_api", "name": "PAN verification", "kind": "kyc", "baseUrl": "https://kyb.example.in/api/v2", "credentialEnv": "PRAVESH_KYB_API_KEY", "enabled": true },
+      { "id": "penny_drop", "name": "Bank account penny-drop", "kind": "bank", "baseUrl": "https://payouts.example.in/v1", "credentialEnv": "PRAVESH_PENNY_DROP_KEY", "enabled": true }
+    ],
+    "notifications": {
+      "channels": ["email", "sms"],
+      "senderEmail": "no-reply@sahyog.example.org",
+      "notifyOnStages": ["submitted", "documents_pending", "approved", "rejected"]
+    },
+    "envVars": [
+      { "name": "VITE_PRAVESH_API_BASE_URL", "description": "Public onboarding API base URL used by the browser.", "secret": false, "required": true, "example": "https://api.sahyog.example.org/onboarding/v1" },
+      { "name": "PRAVESH_GRANTS_WEBHOOK_SECRET", "description": "HMAC secret used to sign grants-system webhook payloads.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_CRM_WEBHOOK_SECRET", "description": "HMAC secret used to sign CRM webhook payloads.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_KYB_API_KEY", "description": "API key for the PAN and registration verification provider.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_PENNY_DROP_KEY", "description": "Credential for bank account verification.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_SMS_SENDER_ID", "description": "DLT-registered SMS sender ID.", "secret": false, "required": false, "example": "SAHYOG" }
+    ]
+  }
+}

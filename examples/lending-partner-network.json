@@ -1,0 +1,94 @@
+{
+  "$schema": "../schema/pravesh.config.schema.json",
+  "schemaVersion": "1.0",
+  "id": "lending-partner-network",
+  "identity": {
+    "name": "Sahyog Lending Partner Network",
+    "tagline": "Onboard regulated lenders, co-lending partners and loan service providers.",
+    "description": "Sahyog connects NBFCs, banks and loan service providers to a shared credit marketplace for MSME and individual borrowers. All partners must be RBI-regulated entities or their contracted LSPs.",
+    "logo": "",
+    "colors": { "primary": "#14532D", "accent": "#16A34A" },
+    "supportEmail": "lenders@sahyog.example.in",
+    "website": "https://sahyog.example.in"
+  },
+  "providerTypes": [
+    { "id": "bank", "name": "Bank", "description": "Scheduled commercial, small finance and regional rural banks." },
+    { "id": "nbfc", "name": "Financial institution (NBFC)", "description": "RBI-registered non-banking financial companies." },
+    { "id": "lsp", "name": "Loan service provider", "description": "Technology and sourcing partners acting on behalf of a regulated lender." }
+  ],
+  "fields": [
+    { "id": "entity_name", "label": "Registered entity name", "type": "text", "required": true, "providerTypes": [] },
+    { "id": "cin", "label": "CIN", "type": "text", "required": true, "placeholder": "U65999MH2016PTC123456", "helpText": "Corporate identification number from the MCA.", "providerTypes": [], "validation": { "pattern": "[LU][0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}", "patternMessage": "CIN is 21 characters, e.g. U65999MH2016PTC123456." } },
+    { "id": "rbi_reg", "label": "RBI registration / licence number", "type": "text", "required": true, "providerTypes": ["bank", "nbfc"] },
+    { "id": "nbfc_layer", "label": "NBFC layer (scale-based regulation)", "type": "radio", "required": true, "options": ["Base layer", "Middle layer", "Upper layer"], "providerTypes": ["nbfc"] },
+    { "id": "regulated_partner", "label": "Regulated entity you act for", "type": "text", "required": true, "helpText": "Name of the bank or NBFC that has appointed you as LSP.", "providerTypes": ["lsp"] },
+    { "id": "products", "label": "Loan products offered", "type": "multiselect", "required": true, "options": ["MSME working capital", "Term loan", "Invoice financing", "Personal loan", "Gold loan", "Two-wheeler loan", "Microfinance (JLG)"], "providerTypes": [] },
+    { "id": "ticket_min", "label": "Minimum ticket size (INR)", "type": "number", "required": true, "placeholder": "50000", "providerTypes": ["bank", "nbfc"], "validation": { "min": 1000 } },
+    { "id": "ticket_max", "label": "Maximum ticket size (INR)", "type": "number", "required": true, "placeholder": "5000000", "providerTypes": ["bank", "nbfc"], "validation": { "min": 1000 } },
+    { "id": "aum", "label": "Assets under management", "type": "dropdown", "required": true, "options": ["Below ₹100 crore", "₹100-500 crore", "₹500-1,000 crore", "₹1,000-10,000 crore", "Above ₹10,000 crore"], "providerTypes": ["nbfc"] },
+    { "id": "gro_name", "label": "Grievance redressal officer", "type": "text", "required": true, "providerTypes": [] },
+    { "id": "gro_email", "label": "Grievance officer email", "type": "email", "required": true, "providerTypes": [] },
+    { "id": "gro_mobile", "label": "Grievance officer mobile", "type": "mobile", "required": true, "providerTypes": [] },
+    { "id": "kfs_url", "label": "Key fact statement template URL", "type": "url", "required": false, "providerTypes": ["bank", "nbfc"] },
+    { "id": "board_resolution_date", "label": "Date of board resolution", "type": "date", "required": true, "providerTypes": [] },
+    { "id": "lsp_agreement", "label": "LSP agreement", "type": "file", "required": true, "helpText": "Signed agreement with the regulated entity (PDF).", "providerTypes": ["lsp"] },
+    { "id": "dla_compliant", "label": "Our digital lending app complies with the RBI Digital Lending Directions, 2025", "type": "checkbox", "required": true, "providerTypes": [] }
+  ],
+  "documents": [
+    { "id": "coi", "name": "Certificate of incorporation", "description": "Issued by the Registrar of Companies.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": [] },
+    { "id": "rbi_cor", "name": "RBI certificate of registration", "description": "Certificate of registration or banking licence.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": ["bank", "nbfc"] },
+    { "id": "board_resolution", "name": "Board resolution", "description": "Authorising participation and naming the authorised signatory.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": [] },
+    { "id": "financials", "name": "Audited financial statements", "description": "Last two financial years.", "acceptedTypes": ["pdf", "xlsx"], "maxSizeMB": 25, "required": true, "providerTypes": ["nbfc"] },
+    { "id": "bank_statement", "name": "Bank statement", "description": "Last 6 months of the primary operating account.", "acceptedTypes": ["pdf"], "maxSizeMB": 10, "required": true, "providerTypes": ["lsp"] },
+    { "id": "infosec", "name": "Information security policy", "description": "Including data localisation and incident response.", "acceptedTypes": ["pdf", "docx"], "maxSizeMB": 10, "required": false, "providerTypes": [] }
+  ],
+  "workflow": {
+    "initialStage": "draft",
+    "submittedStage": "submitted",
+    "stages": [
+      { "id": "draft", "name": "Draft", "description": "Lender is preparing the application.", "tone": "neutral", "terminal": false, "requiredActions": [], "transitions": ["submitted"] },
+      { "id": "submitted", "name": "Submitted", "description": "Queued for partner risk.", "tone": "info", "terminal": false, "requiredActions": [], "transitions": ["due_diligence"] },
+      { "id": "due_diligence", "name": "Due diligence", "description": "Regulatory standing, financials and grievance mechanism are reviewed.", "tone": "info", "terminal": false, "requiredActions": ["Check RBI regulated-entity list", "Review last two years' financials", "Sanctions and PEP screening"], "transitions": ["documents_pending", "credit_committee", "rejected"] },
+      { "id": "documents_pending", "name": "Documents pending", "description": "Further documents requested from the lender.", "tone": "warning", "terminal": false, "requiredActions": [], "transitions": ["due_diligence"] },
+      { "id": "credit_committee", "name": "Credit committee", "description": "Partnership is presented to the credit and risk committee.", "tone": "warning", "terminal": false, "requiredActions": ["Committee minutes uploaded"], "transitions": ["integration", "rejected"] },
+      { "id": "integration", "name": "API integration", "description": "Loan origination, KFS and disbursal APIs are certified in sandbox.", "tone": "info", "terminal": false, "requiredActions": ["Sandbox certification passed", "Production keys issued"], "transitions": ["live"] },
+      { "id": "live", "name": "Live", "description": "Lender is live on the marketplace.", "tone": "success", "terminal": true, "requiredActions": [], "transitions": [] },
+      { "id": "rejected", "name": "Declined", "description": "Partnership declined.", "tone": "danger", "terminal": true, "requiredActions": [], "transitions": [] }
+    ]
+  },
+  "consents": [
+    { "id": "msa", "title": "Master services agreement", "description": "I confirm that I am authorised to bind the entity to the Sahyog master services agreement.", "purpose": "Contractual", "required": true, "stage": "draft", "version": "2026-04" },
+    { "id": "bureau_pull", "title": "Commercial bureau check", "description": "I authorise Sahyog to obtain a commercial credit report on the entity from a credit information company.", "purpose": "Partner risk assessment", "required": true, "stage": "draft", "version": "2026-01" },
+    { "id": "sandbox_logs", "title": "Sandbox log retention", "description": "I agree that sandbox API logs may be retained for 180 days for certification audit.", "purpose": "Technical certification", "required": true, "stage": "integration", "version": "2026-01" }
+  ],
+  "technical": {
+    "apiBaseUrl": "https://api.sahyog.example.in/partners/v2",
+    "webhooks": [
+      { "id": "wh_risk", "url": "https://risk.sahyog.example.in/hooks/onboarding", "events": ["application.submitted", "document.uploaded", "consent.recorded"], "secretEnv": "PRAVESH_RISK_WEBHOOK_SECRET", "enabled": true },
+      { "id": "wh_marketplace", "url": "https://marketplace.sahyog.example.in/hooks/lender-live", "events": ["application.approved"], "secretEnv": "PRAVESH_MARKETPLACE_WEBHOOK_SECRET", "enabled": true }
+    ],
+    "callbacks": {
+      "onSubmit": "https://sahyog.example.in/partners/received",
+      "onApproved": "https://console.sahyog.example.in/onboarding",
+      "onRejected": "https://sahyog.example.in/partners/contact"
+    },
+    "integrations": [
+      { "id": "mca", "name": "MCA company master data", "kind": "registry", "baseUrl": "https://mca-data.example.in/v1", "credentialEnv": "PRAVESH_MCA_API_KEY", "enabled": true },
+      { "id": "bureau", "name": "Commercial credit bureau", "kind": "kyc", "baseUrl": "https://cic.example.in/commercial/v1", "credentialEnv": "PRAVESH_BUREAU_CLIENT_SECRET", "enabled": true },
+      { "id": "crm", "name": "Partner CRM", "kind": "crm", "baseUrl": "https://crm.example.com/api", "credentialEnv": "PRAVESH_CRM_TOKEN", "enabled": false }
+    ],
+    "notifications": {
+      "channels": ["email", "webhook"],
+      "senderEmail": "lenders@sahyog.example.in",
+      "notifyOnStages": ["submitted", "documents_pending", "integration", "live", "rejected"]
+    },
+    "envVars": [
+      { "name": "VITE_PRAVESH_API_BASE_URL", "description": "Public partner API base URL.", "secret": false, "required": true, "example": "https://api.sahyog.example.in/partners/v2" },
+      { "name": "PRAVESH_RISK_WEBHOOK_SECRET", "description": "Signing secret for the risk service webhook.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_MARKETPLACE_WEBHOOK_SECRET", "description": "Signing secret for the marketplace webhook.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_MCA_API_KEY", "description": "MCA data provider key.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_BUREAU_CLIENT_SECRET", "description": "Credit bureau OAuth client secret.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_CRM_TOKEN", "description": "Partner CRM access token.", "secret": true, "required": false, "example": "" }
+    ]
+  }
+}

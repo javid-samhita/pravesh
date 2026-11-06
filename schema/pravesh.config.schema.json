@@ -1,0 +1,616 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/samhita-oss/pravesh/schema/pravesh.config.schema.json",
+  "title": "Pravesh configuration",
+  "description": "Describes a provider onboarding portal rendered by the Pravesh runtime. Mirrors src/config/types.ts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "identity",
+    "providerTypes",
+    "fields",
+    "documents",
+    "workflow",
+    "consents",
+    "technical"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$",
+      "description": "Stable slug; scopes stored applications."
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "description",
+        "logo",
+        "colors",
+        "supportEmail",
+        "website"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tagline": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string",
+          "description": "Data URL, URL, or empty string."
+        },
+        "colors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "primary",
+            "accent"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        },
+        "supportEmail": {
+          "type": "string",
+          "format": "email"
+        },
+        "website": {
+          "type": "string"
+        }
+      }
+    },
+    "providerTypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/providerType"
+      }
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/field"
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/document"
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "initialStage",
+        "submittedStage",
+        "stages"
+      ],
+      "properties": {
+        "initialStage": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "submittedStage": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/stage"
+          }
+        }
+      }
+    },
+    "consents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/consent"
+      }
+    },
+    "technical": {
+      "$ref": "#/$defs/technical"
+    }
+  },
+  "$defs": {
+    "providerType": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "type",
+        "required",
+        "providerTypes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "text",
+            "number",
+            "email",
+            "mobile",
+            "date",
+            "dropdown",
+            "multiselect",
+            "radio",
+            "checkbox",
+            "file",
+            "textarea",
+            "url"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "placeholder": {
+          "type": "string"
+        },
+        "helpText": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "providerTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Provider type ids; empty means all."
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "minLength": {
+              "type": "number"
+            },
+            "maxLength": {
+              "type": "number"
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "patternMessage": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "type": {
+            "enum": [
+              "dropdown",
+              "multiselect",
+              "radio"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "options"
+        ],
+        "properties": {
+          "options": {
+            "minItems": 2
+          }
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "description",
+        "acceptedTypes",
+        "maxSizeMB",
+        "required",
+        "providerTypes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "acceptedTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]{1,8}$"
+          }
+        },
+        "maxSizeMB": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "providerTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "description",
+        "tone",
+        "terminal",
+        "requiredActions",
+        "transitions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "tone": {
+          "enum": [
+            "neutral",
+            "info",
+            "warning",
+            "success",
+            "danger"
+          ]
+        },
+        "terminal": {
+          "type": "boolean"
+        },
+        "requiredActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]*$"
+          }
+        }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "description",
+        "purpose",
+        "required",
+        "stage",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "stage": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "technical": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apiBaseUrl",
+        "webhooks",
+        "callbacks",
+        "integrations",
+        "notifications",
+        "envVars"
+      ],
+      "properties": {
+        "apiBaseUrl": {
+          "type": "string"
+        },
+        "webhooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "url",
+              "events",
+              "secretEnv",
+              "enabled"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "url": {
+                "type": "string"
+              },
+              "events": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "application.submitted",
+                    "application.stage_changed",
+                    "application.approved",
+                    "application.rejected",
+                    "document.uploaded",
+                    "consent.recorded"
+                  ]
+                }
+              },
+              "secretEnv": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$",
+                "description": "Name of the env var holding the signing secret. Never the secret itself."
+              },
+              "enabled": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "callbacks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "onSubmit",
+            "onApproved",
+            "onRejected"
+          ],
+          "properties": {
+            "onSubmit": {
+              "type": "string"
+            },
+            "onApproved": {
+              "type": "string"
+            },
+            "onRejected": {
+              "type": "string"
+            }
+          }
+        },
+        "integrations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "kind",
+              "baseUrl",
+              "credentialEnv",
+              "enabled"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "kyc",
+                  "gst",
+                  "bank",
+                  "esign",
+                  "crm",
+                  "registry",
+                  "other"
+                ]
+              },
+              "baseUrl": {
+                "type": "string"
+              },
+              "credentialEnv": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              },
+              "enabled": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "notifications": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "channels",
+            "senderEmail",
+            "notifyOnStages"
+          ],
+          "properties": {
+            "channels": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "email",
+                  "sms",
+                  "webhook"
+                ]
+              }
+            },
+            "senderEmail": {
+              "type": "string"
+            },
+            "notifyOnStages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              }
+            }
+          }
+        },
+        "envVars": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "description",
+              "secret",
+              "required",
+              "example"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              },
+              "description": {
+                "type": "string"
+              },
+              "secret": {
+                "type": "boolean"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "example": {
+                "type": "string"
+              }
+            },
+            "if": {
+              "properties": {
+                "secret": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "name": {
+                  "not": {
+                    "pattern": "^VITE_"
+                  }
+                },
+                "example": {
+                  "const": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

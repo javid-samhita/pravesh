@@ -1,0 +1,89 @@
+{
+  "$schema": "../schema/pravesh.config.schema.json",
+  "schemaVersion": "1.0",
+  "id": "employment-ecosystem",
+  "identity": {
+    "name": "Rozgar Setu Partner Portal",
+    "tagline": "Bring employers, training partners and placement agencies onto one employment network.",
+    "description": "Apply to join the Rozgar Setu employment ecosystem as an employer, skilling partner or placement agency. Verified partners can publish jobs, run assessments and track placements across districts.",
+    "logo": "",
+    "colors": { "primary": "#7C2D12", "accent": "#EA580C" },
+    "supportEmail": "partners@rozgarsetu.example.org",
+    "website": "https://rozgarsetu.example.org"
+  },
+  "providerTypes": [
+    { "id": "employer", "name": "Employer", "description": "Companies hiring entry-level and skilled workers through the network." },
+    { "id": "training_partner", "name": "Training partner", "description": "Skilling institutes affiliated with a sector skill council." },
+    { "id": "placement_agency", "name": "Placement agency", "description": "Licensed recruitment and staffing agencies." }
+  ],
+  "fields": [
+    { "id": "org_name", "label": "Organisation name", "type": "text", "required": true, "placeholder": "Registered name of the organisation", "providerTypes": [] },
+    { "id": "industry", "label": "Industry", "type": "dropdown", "required": true, "options": ["Retail", "Logistics & Warehousing", "Healthcare", "BFSI", "Hospitality", "Manufacturing", "IT/ITES", "Construction"], "providerTypes": ["employer", "placement_agency"] },
+    { "id": "headcount", "label": "Total employees", "type": "dropdown", "required": true, "options": ["1-49", "50-249", "250-999", "1,000-4,999", "5,000+"], "providerTypes": ["employer"] },
+    { "id": "hiring_districts", "label": "Districts you hire in", "type": "multiselect", "required": true, "options": ["Bengaluru Urban", "Mysuru", "Pune", "Nagpur", "Lucknow", "Kanpur Nagar", "Patna", "Jaipur", "Coimbatore", "Hyderabad"], "providerTypes": ["employer", "placement_agency"] },
+    { "id": "monthly_openings", "label": "Expected openings per month", "type": "number", "required": true, "placeholder": "40", "providerTypes": ["employer"], "validation": { "min": 1, "max": 100000 } },
+    { "id": "ssc_affiliation", "label": "Sector skill council", "type": "dropdown", "required": true, "options": ["Retailers Association's Skill Council", "Logistics Skill Council", "Healthcare Sector Skill Council", "BFSI Sector Skill Council", "Tourism & Hospitality Skill Council"], "providerTypes": ["training_partner"] },
+    { "id": "smart_id", "label": "SMART centre ID", "type": "text", "required": true, "placeholder": "TC123456", "helpText": "Training centre ID from the Skill India SMART portal.", "providerTypes": ["training_partner"], "validation": { "pattern": "TC[0-9]{6}", "patternMessage": "Centre ID looks like TC123456." } },
+    { "id": "annual_capacity", "label": "Annual training capacity", "type": "number", "required": true, "providerTypes": ["training_partner"], "validation": { "min": 30 } },
+    { "id": "rpsa_licence", "label": "Recruitment licence number", "type": "text", "required": true, "helpText": "Licence under the state Private Placement Agencies (Regulation) rules.", "providerTypes": ["placement_agency"] },
+    { "id": "hr_email", "label": "HR / partnerships email", "type": "email", "required": true, "providerTypes": [] },
+    { "id": "hr_mobile", "label": "HR contact mobile", "type": "mobile", "required": true, "providerTypes": [] },
+    { "id": "careers_url", "label": "Careers page", "type": "url", "required": false, "placeholder": "https://", "providerTypes": ["employer"] },
+    { "id": "inclusive_hiring", "label": "Inclusive hiring commitments", "type": "radio", "required": false, "options": ["Women-first roles", "Persons with disabilities", "Both", "Not at present"], "providerTypes": ["employer"] },
+    { "id": "about", "label": "About your organisation", "type": "textarea", "required": false, "placeholder": "Two or three sentences participants will see on your profile.", "providerTypes": [], "validation": { "maxLength": 600 } },
+    { "id": "pf_registered", "label": "We are registered with EPFO and ESIC", "type": "checkbox", "required": true, "providerTypes": ["employer", "placement_agency"] }
+  ],
+  "documents": [
+    { "id": "incorporation", "name": "Certificate of incorporation / registration", "description": "MCA certificate, partnership deed or society registration.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": [] },
+    { "id": "pan", "name": "Organisation PAN", "description": "PAN card of the organisation.", "acceptedTypes": ["pdf", "jpg", "png"], "maxSizeMB": 2, "required": true, "providerTypes": [] },
+    { "id": "epfo", "name": "EPFO establishment certificate", "description": "Proof of EPFO registration.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": ["employer", "placement_agency"] },
+    { "id": "ssc_letter", "name": "SSC affiliation letter", "description": "Affiliation or accreditation letter from the sector skill council.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": ["training_partner"] },
+    { "id": "agency_licence", "name": "Placement agency licence", "description": "Valid licence copy.", "acceptedTypes": ["pdf"], "maxSizeMB": 5, "required": true, "providerTypes": ["placement_agency"] },
+    { "id": "posh_policy", "name": "POSH policy", "description": "Policy under the Sexual Harassment of Women at Workplace Act, 2013.", "acceptedTypes": ["pdf", "docx"], "maxSizeMB": 5, "required": false, "providerTypes": ["employer"] }
+  ],
+  "workflow": {
+    "initialStage": "draft",
+    "submittedStage": "submitted",
+    "stages": [
+      { "id": "draft", "name": "Draft", "description": "Partner is completing the application.", "tone": "neutral", "terminal": false, "requiredActions": [], "transitions": ["submitted"] },
+      { "id": "submitted", "name": "Submitted", "description": "Waiting for the district partnerships team.", "tone": "info", "terminal": false, "requiredActions": [], "transitions": ["verification", "rejected"] },
+      { "id": "verification", "name": "Verification", "description": "Statutory registrations and licences are verified.", "tone": "info", "terminal": false, "requiredActions": ["Verify EPFO / ESIC", "Check licence validity"], "transitions": ["site_visit", "info_requested", "rejected"] },
+      { "id": "info_requested", "name": "Information requested", "description": "The partner has been asked for clarifications.", "tone": "warning", "terminal": false, "requiredActions": [], "transitions": ["verification", "withdrawn"] },
+      { "id": "site_visit", "name": "Site visit", "description": "District coordinator visits the workplace or training centre.", "tone": "warning", "terminal": false, "requiredActions": ["Upload geo-tagged visit photos", "Coordinator sign-off"], "transitions": ["approved", "rejected"] },
+      { "id": "approved", "name": "Active partner", "description": "Partner can publish jobs or batches.", "tone": "success", "terminal": true, "requiredActions": [], "transitions": [] },
+      { "id": "rejected", "name": "Rejected", "description": "Application declined.", "tone": "danger", "terminal": true, "requiredActions": [], "transitions": [] },
+      { "id": "withdrawn", "name": "Withdrawn", "description": "Partner withdrew the application.", "tone": "neutral", "terminal": true, "requiredActions": [], "transitions": [] }
+    ]
+  },
+  "consents": [
+    { "id": "partner_terms", "title": "Partner terms of participation", "description": "I agree to the Rozgar Setu partner terms, including fair hiring and no-fee-from-candidates commitments.", "purpose": "Contractual", "required": true, "stage": "draft", "version": "3.1" },
+    { "id": "data_sharing", "title": "Candidate data handling", "description": "I will process candidate data only for recruitment or training and in line with the Digital Personal Data Protection Act, 2023.", "purpose": "Data protection", "required": true, "stage": "draft", "version": "2.0" },
+    { "id": "site_visit_consent", "title": "Site visit", "description": "I consent to a scheduled visit by a district coordinator, including photographs of the premises.", "purpose": "Physical verification", "required": true, "stage": "site_visit", "version": "1.0" }
+  ],
+  "technical": {
+    "apiBaseUrl": "https://api.rozgarsetu.example.org/partners/v1",
+    "webhooks": [
+      { "id": "wh_jobs", "url": "https://jobs.rozgarsetu.example.org/hooks/partner-status", "events": ["application.approved", "application.rejected", "application.stage_changed"], "secretEnv": "PRAVESH_JOBS_WEBHOOK_SECRET", "enabled": true }
+    ],
+    "callbacks": {
+      "onSubmit": "https://rozgarsetu.example.org/partners/submitted",
+      "onApproved": "https://employer.rozgarsetu.example.org/setup",
+      "onRejected": "https://rozgarsetu.example.org/partners/faq"
+    },
+    "integrations": [
+      { "id": "epfo", "name": "EPFO establishment lookup", "kind": "registry", "baseUrl": "https://epfo-gateway.example.in/v1", "credentialEnv": "PRAVESH_EPFO_TOKEN", "enabled": true },
+      { "id": "esign", "name": "Aadhaar eSign (via ESP)", "kind": "esign", "baseUrl": "https://esp.example.in/esign/v3", "credentialEnv": "PRAVESH_ESIGN_CLIENT_SECRET", "enabled": false }
+    ],
+    "notifications": {
+      "channels": ["email", "sms", "webhook"],
+      "senderEmail": "partners@rozgarsetu.example.org",
+      "notifyOnStages": ["submitted", "info_requested", "site_visit", "approved", "rejected"]
+    },
+    "envVars": [
+      { "name": "VITE_PRAVESH_API_BASE_URL", "description": "Public partner onboarding API.", "secret": false, "required": true, "example": "https://api.rozgarsetu.example.org/partners/v1" },
+      { "name": "PRAVESH_JOBS_WEBHOOK_SECRET", "description": "Signing secret for the jobs service webhook.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_EPFO_TOKEN", "description": "Bearer token for the EPFO gateway.", "secret": true, "required": true, "example": "" },
+      { "name": "PRAVESH_ESIGN_CLIENT_SECRET", "description": "eSign service provider client secret.", "secret": true, "required": false, "example": "" }
+    ]
+  }
+}

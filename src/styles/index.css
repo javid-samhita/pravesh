@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-white font-sans text-[14px] leading-6 text-zinc-900 antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  :focus-visible {
+    outline: 2px solid #0f766e;
+    outline-offset: 2px;
+  }
+  code,
+  kbd,
+  pre {
+    @apply font-mono;
+  }
+  ::selection {
+    background: #99f6e4;
+    color: #0a0a0a;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
+  }
+  .label-xs {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-zinc-500;
+  }
+  .hairline {
+    @apply border-zinc-200;
+  }
+  .grid-bg {
+    background-image: linear-gradient(to right, #f4f4f5 1px, transparent 1px), linear-gradient(to bottom, #f4f4f5 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+}
+
+/* Prose for the in-app documentation renderer */
+.doc-prose h1 { @apply mb-4 mt-0 text-[28px] font-semibold leading-tight tracking-tight; }
+.doc-prose h2 { @apply mb-3 mt-10 scroll-mt-20 border-t border-zinc-200 pt-6 text-xl font-semibold tracking-tight; }
+.doc-prose h3 { @apply mb-2 mt-6 scroll-mt-20 text-base font-semibold; }
+.doc-prose h4 { @apply mb-2 mt-4 text-sm font-semibold; }
+.doc-prose p { @apply my-3 text-zinc-700; }
+.doc-prose ul { @apply my-3 list-disc space-y-1 pl-5 text-zinc-700; }
+.doc-prose ol { @apply my-3 list-decimal space-y-1 pl-5 text-zinc-700; }
+.doc-prose a { @apply text-teal-700 underline decoration-teal-700/30 underline-offset-2 hover:decoration-teal-700; }
+.doc-prose code { @apply rounded border border-zinc-200 bg-zinc-50 px-1 py-px text-[12.5px] text-zinc-800; }
+.doc-prose pre code { @apply border-0 bg-transparent p-0 text-inherit; }
+.doc-prose table { @apply my-4 w-full border-collapse text-[13px]; }
+.doc-prose th { @apply border-b border-zinc-300 px-2 py-1.5 text-left font-medium text-zinc-900; }
+.doc-prose td { @apply border-b border-zinc-100 px-2 py-1.5 align-top text-zinc-700; }
+.doc-prose blockquote { @apply my-4 border-l-2 border-teal-500 pl-4 text-zinc-600; }
+.doc-prose hr { @apply my-8 border-zinc-200; }
