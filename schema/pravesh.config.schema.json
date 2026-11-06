@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/samhita-oss/pravesh/schema/pravesh.config.schema.json",
+  "$id": "https://github.com/mahammedjavid/pravesh/schema/pravesh.config.schema.json",
   "title": "Pravesh configuration",
   "description": "Describes a provider onboarding portal rendered by the Pravesh runtime. Mirrors src/config/types.ts.",
   "type": "object",

@@ -5,7 +5,7 @@ Thanks for helping build Pravesh. This guide covers the workflow, conventions an
 ## Getting set up
 
 ```bash
-git clone https://github.com/samhita-oss/pravesh.git
+git clone https://github.com/mahammedjavid/pravesh.git
 cd pravesh
 npm install
 npm run dev

@@ -2,7 +2,7 @@ import { CodeBlock } from '../ui';
 import { Section } from './Section';
 
 const CMDS = `# clone the starter
-npx degit samhita-oss/pravesh my-portal
+npx degit mahammedjavid/pravesh my-portal
 cd my-portal
 # install and run the configurator
 npm install

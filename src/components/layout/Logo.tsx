@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export const REPO_URL = 'https://github.com/samhita-oss/pravesh';
+export const REPO_URL = 'https://github.com/mahammedjavid/pravesh';
 export const VERSION = 'v0.4.0';
 
 export function Logo({ to = '/' }: { to?: string }) {

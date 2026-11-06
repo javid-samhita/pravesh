@@ -30,7 +30,7 @@ function resolveHref(href: string, docLinks: Record<string, string>): { to?: str
   const slug = docLinks[file];
   if (slug) return { to: `/docs/${slug}${hash ? `#${hash}` : ''}` };
   if (!path && hash) return { to: `#${hash}` };
-  return { href: `https://github.com/samhita-oss/pravesh/blob/main/${path}` };
+  return { href: `https://github.com/mahammedjavid/pravesh/blob/main/${path}` };
 }
 
 function inline(text: string, docLinks: Record<string, string>, keyBase = 'i'): ReactNode[] {

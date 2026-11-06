@@ -49,8 +49,8 @@ export function Hero() {
           </div>
           <div className="mt-8 inline-flex max-w-full items-center gap-3 rounded-md border border-zinc-800 bg-zinc-950 py-1.5 pl-3 pr-1.5 font-mono text-[12.5px] text-zinc-200">
             <span className="select-none text-zinc-500">$</span>
-            <span className="truncate">npx degit samhita-oss/pravesh my-portal</span>
-            <CopyButton text="npx degit samhita-oss/pravesh my-portal" />
+            <span className="truncate">npx degit mahammedjavid/pravesh my-portal</span>
+            <CopyButton text="npx degit mahammedjavid/pravesh my-portal" />
           </div>
         </div>
 

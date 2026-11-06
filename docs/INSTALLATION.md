@@ -13,7 +13,7 @@ Pravesh is a static React application. It needs Node.js only to build; the outpu
 ## Install and run
 
 ```bash
-git clone https://github.com/samhita-oss/pravesh.git
+git clone https://github.com/mahammedjavid/pravesh.git
 cd pravesh
 npm install
 npm run dev

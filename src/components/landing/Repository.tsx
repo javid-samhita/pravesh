@@ -29,7 +29,7 @@ export function Repository() {
             <div className="flex items-center gap-2 text-[14px]">
               <BookOpen size={15} className="text-zinc-500" aria-hidden="true" />
               <a href={REPO_URL} target="_blank" rel="noreferrer" className="hover:underline">
-                <span className="text-zinc-600">samhita-oss</span> <span className="text-zinc-400">/</span> <span className="font-semibold text-zinc-900">pravesh</span>
+                <span className="text-zinc-600">mahammedjavid</span> <span className="text-zinc-400">/</span> <span className="font-semibold text-zinc-900">pravesh</span>
               </a>
               <span className="rounded-full border border-zinc-300 px-2 text-[11px] font-medium text-zinc-600">Public</span>
             </div>
@@ -111,7 +111,7 @@ export function Repository() {
             </ul>
           </div>
           <a href={REPO_URL} target="_blank" rel="noreferrer" className={buttonClass('secondary', 'md', 'w-full')}>
-            github.com/samhita-oss/pravesh
+            github.com/mahammedjavid/pravesh
           </a>
         </aside>
       </div>
